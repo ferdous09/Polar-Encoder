@@ -29,9 +29,9 @@ else
 end
 R = K/E;                                                                    % Effective code rate
 %% Loop over for different SNR values
-snr = -1:1:2;
+snr = -5:1:5;
 for k = 1:1:length(snr)
-    fprintf("Current SNR Loop: ")
+    fprintf("SNR Value in Current Loop:")
     disp(snr(k))
     EbNo = snr(k);
     bps = 2;                                                                % bits per symbol, 1 for BPSK, 2 for QPSK
@@ -47,13 +47,13 @@ for k = 1:1:length(snr)
         N = length(encOut);
         
         modIn = nrRateMatchPolar(encOut,K,E,iBIL);                          % Rate match
-        modIn_polar = PolarCoding(A,E,msg,linkDir);                         % From the Coded Function PolarCoding
+        modIn_polar = PolarCoding(A,E,msg,linkDir, iBIL);                         % From the Coded Function PolarCoding
         
         modOut = nrSymbolModulate(modIn,'QPSK');                            % Modulate
-        modOut_polar = nrSymbolModulate(modIn_polar','QPSK');               % Modulate
+        modOut_polar = nrSymbolModulate(modIn_polar,'QPSK');               % Modulate
         
         rSig = chan(modOut);                                                % Add White Gaussian noise
-        rSig_polar =chan(modOut_polar);
+        rSig_polar = chan(modOut_polar);
         
         rxLLR = nrSymbolDemodulate(rSig,'QPSK',noiseVar);                   % Soft demodulate
         rxLLR_polar = nrSymbolDemodulate(rSig_polar,'QPSK', noiseVar);
