@@ -28,28 +28,33 @@ function bo_interleaved_code = Rate_Matching(N, E, bo, iBIL)
         equation = T*(T+1) >= E;
         sl = double(solve(equation, T));
         t = ceil(max(sl));
-        k = 0;
+        k = 1;
+        v = zeros(E,1);
+        i_idx = 0;
         for ii = 0:t-1
             for jj= 0:t-1-ii
+                i_idx = i_idx+1;
                 if k < E
-                    v(ii,jj) = bo_bit_selection(k);
+                    v(i_idx) = bo_bit_selection(k);
                 else
-                    v(ii,jj) = 0;
+                    v(i_idx) = 0;
                 end
                 k=k+1;
             end
         end
-        k = 0;
+        k = 1;
+        i_idx = 0;
+        f = zeros(E,1);
         for jj = 0:t-1
-            for ii =0:t-1-jj
-                if v(ii,jj) ~= 0
-                    f(k) = v(ii,jj);
+            for ii = 0:t-1-jj
+                i_idx = i_idx+1;
+                if v(i_idx) ~= 0
+                    f(k) = v(i_idx);
                     k=k+1;
                 end
             end
         end
         bo_interleaved_code = f;
-        
         
     else
         bo_interleaved_code = bo_bit_selection;                         % No Interleaving of coded bits are performed
