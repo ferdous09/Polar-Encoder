@@ -1,4 +1,4 @@
-function bo_interleaved_code = PolarCoding(A, E, bi, linkDir)
+function bo_interleaved_code = PolarCoding(A, E, bi, linkDir, iBIL)
 
     %% Step 1: Get the Reliability Sequence
     reliability_sequence = xlsread('Reliability_Sequence');  % Extracted from TS 38.212 Table 5.3.1.2-1
@@ -11,12 +11,12 @@ function bo_interleaved_code = PolarCoding(A, E, bi, linkDir)
     if strcmpi(linkDir,'DL')                                    % Downlink scenario (K >= 36, including CRC bits)
         crcLen = 24;                                            % Number of CRC bits for DL, Section 5.1, [6]
         poly = '24C';                                           % CRC polynomial
-        iBIL = false;                                           % Interleave coded bits, Section 5.4.1.3, [6]
+%         iBIL = true;                                           % Interleave coded bits, Section 5.4.1.3, [6]
         K = A+24;
     else                                                        % Uplink scenario (K > 30, including CRC bits)
         crcLen = 11;
         poly = '11';
-        iBIL = false;                                           % Interleave coded bits, Section 5.4.1.3, [6]
+%         iBIL = true;                                           % Interleave coded bits, Section 5.4.1.3, [6]
         K = A+11;
     end
 
