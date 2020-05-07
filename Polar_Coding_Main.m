@@ -10,12 +10,12 @@ linkDir = 'DL';                                                             % Li
 ber = comm.ErrorRate;
 if strcmpi(linkDir,'DL')
     % Downlink scenario (K >= 36, including CRC bits)
-    crcLen = 24;      % Number of CRC bits for DL, Section 5.1, [6]
-    poly = '24C';     % CRC polynomial
-    nPC = 0;          % Number of parity check bits, Section 5.3.1.2, [6]
-    nMax = 9;         % Maximum value of n, for 2^n, Section 7.3.3, [6]
-    iIL = true;       % Interleave input, Section 5.3.1.1, [6]
-    iBIL = false;     % Interleave coded bits, Section 5.4.1.3, [6]
+    crcLen = 24;                        % Number of CRC bits for DL, Section 5.1, TS 38.212
+    poly = '24C';                       % CRC polynomial
+    nPC = 0;                            % Number of parity check bits, Section 5.3.1.2, TS 38.212
+    nMax = 9;                           % Maximum value of n, for 2^n, Section 7.3.3, TS 38.212
+    iIL = true;                         % Interleave input, Section 5.3.1.1, TS 38.212
+    iBIL = true;                        % Interleave coded bits, Section 5.4.1.3, TS 38.212
     K = A+24;
 else
     % Uplink scenario (K > 30, including CRC bits)
@@ -29,8 +29,10 @@ else
 end
 R = K/E;                                                                    % Effective code rate
 %% Loop over for different SNR values
-snr = -5:1:5;
+snr = -1:1:2;
 for k = 1:1:length(snr)
+    fprintf("Current SNR Loop: ")
+    disp(snr(k))
     EbNo = snr(k);
     bps = 2;                                                                % bits per symbol, 1 for BPSK, 2 for QPSK
     EsNo = EbNo + 10*log10(bps);
@@ -79,7 +81,7 @@ figure(1); clf;
 subplot(1,2,1)
 fig = semilogy(snr, Bit_error_rate,'-.rd', snr, Bit_error_rate_polar, ':ks');
 set(fig, 'Linewidth',2)
-legend('Matlab Built-In','Our Coded Results', 'Location','NorthEast', 'FontSize',14)
+legend('nrPolarEncode','Encoding Simulator', 'Location','NorthEast', 'FontSize',14)
 xlabel('SNR,  E_b/N_0 [dB]', 'Fontsize', 16)
 ylabel('BER', 'FontSize',16)
 str = sprintf('BER vs SNR in Polar Code (%s-Link)',linkDir);
@@ -88,7 +90,7 @@ title(str, 'FontSize',16)
 subplot(1,2,2)
 fig1 = semilogy(snr, Block_error_rate,'-.rd', snr, Block_error_rate_polar, ':ks');
 set(fig1, 'Linewidth',2)
-legend('Matlab Built-In','Our Coded Results', 'Location','NorthEast', 'FontSize',14)
+legend('nrPolarEncode','Encoding Simulator', 'Location','NorthEast', 'FontSize',14)
 xlabel('SNR, E_b/N_0 [dB]', 'Fontsize', 16)
 ylabel('BLER', 'FontSize',16)
 str0 = sprintf('BLER vs SNR in Polar Code (%s-Link)',linkDir);
